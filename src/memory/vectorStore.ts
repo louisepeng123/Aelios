@@ -440,7 +440,7 @@ export async function listVectorMemories(
       if (input.namespace && record.namespace !== input.namespace) return [];
       return [record];
     })
-    .sort((a, b) => Number(b.pinned) - Number(a.pinned) || b.importance - a.importance || b.updated_at.localeCompare(a.updated_at));
+    .sort((a, b) => Number(b.pinned) - Number(a.pinned) || b.created_at.localeCompare(a.created_at) * -1 || b.importance - a.importance);
 
   return {
     data,
