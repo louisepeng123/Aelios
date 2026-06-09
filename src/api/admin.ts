@@ -110,8 +110,8 @@ async function loadList(cursor=null, append=false){
   state.loading = true; state.error = ""; if(!append) state.memories = []; render(append);
   try {
     const data = await request("/v1/memory?limit=100" + (cursor ? "&cursor=" + encodeURIComponent(cursor) : ""));
-    const incoming = data.data || [];
-    state.memories = append ? [...state.memories, ...incoming] : incoming;
+    const incoming = (data.data || []).sort((a,b) => (b.created_at||"").localeCompare(a.created_at||""));
+    state.memories = append ? [...state.memories, ...incoming].sort((a,b) => (b.created_at||"").localeCompare(a.created_at||"")) : incoming;
     state.paging = data.paging || { cursor:null, has_more:false, count:incoming.length };
     state.status = "connected";
   } catch(e) { state.error = e.message; state.status = state.status === "idle" ? "error" : state.status; }
